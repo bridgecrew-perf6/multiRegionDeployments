@@ -5,9 +5,21 @@ import aws_cdk as cdk
 
 from contextstack.contextstack_stack import ContextstackStack
 
+from ContextGroup import *
 
 app = cdk.App()
-ContextstackStack(app, "ContextstackStack",
+
+# Load the context group
+context_group = ContextGroup(app)
+
+# Context variables within group name as loaded as attribute onto ContextGroup object
+# print(context_group.AWSAccountID)
+# print(context_group.AWSProfileName)
+
+# Pass the group to print() or other string functions to see all of the group variables
+# print(context_group)
+
+ContextstackStack(app, "ContextstackStack", context_group=context_group
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.

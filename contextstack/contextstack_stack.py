@@ -1,19 +1,24 @@
 from aws_cdk import (
-    # Duration,
+    Duration,
     Stack,
-    # aws_sqs as sqs,
 )
+
+from aws_cdk.aws_lambda import Code, Function, Runtime, LayerVersion
 from constructs import Construct
+
+from ContextGroup import *
 
 class ContextstackStack(Stack):
 
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str,  context_group: ContextGroup, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # The code that defines your stack goes here
+        print(context_group.AWSProfileName)
 
-        # example resource
-        # queue = sqs.Queue(
-        #     self, "ContextstackQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
+        demofn = Function(self, "DemoFunction",
+            runtime=Runtime.PYTHON_3_7,
+            handler="index.handler",
+            code=Code.from_asset("Lambda"),
+            timeout=Duration.seconds(40)
+        )
+        

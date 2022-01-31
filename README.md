@@ -1,58 +1,40 @@
+When running CDK commands, pass the command line flag `-c ctxgroup=group_name_here` to activate a specific context group. If you do not specify one, then the default configured in `cdk.json` is used as the fallback.
 
-# Welcome to your CDK Python project!
+Full example: 
 
-This is a blank project for Python development with CDK.
+`cdk --profile my_profile -c ctxgroup=dev synth`
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+If you did not provide a default name, and did not specify one on the command line, then an error condition will be raised.
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
 
-To manually create a virtualenv on MacOS and Linux:
+#Additional Topics
 
+Shared Values
+It is not unusual to have values that are useful in all environments. This is particular true of cross-account resources.
+
+You can define a special context group named all, and those keys and values will be automatically included with any other context group activated by name.
+
+Example in `cdk.json`:
+
+```json
+{
+  "context": {
+    "contextGroups": {
+      "default": "dev",
+      "all": {
+        "some_shared_efs_id": "fs-00112233"
+      },
+      "dev": {
+        "account_id": "****",
+        "em_instance_type": "t3.large",
+        "vpc_id": "vpc-*****************"
+      },
+      "prod": {
+        "account_id": "****",
+        "em_instance_type": "r5.large",
+        "vpc_id": "vpc-*****************"        
+      } 
+    }
+  }
+}
 ```
-$ python -m venv .venv
-```
-
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
-
-```
-$ source .venv/bin/activate
-```
-
-If you are a Windows platform, you would activate the virtualenv like this:
-
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
-```
-
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
-```
-
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
-
-## Useful commands
-
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
